@@ -3,6 +3,8 @@ module List.Sort exposing (bubble, each2OrderMerge, insertion, merge, quick)
 import Order exposing (Ordering)
 
 
+{-| Runtime `n^2`
+-}
 bubble : Ordering element -> List element -> List element
 bubble elementOrder =
     \list ->
@@ -14,6 +16,8 @@ bubble elementOrder =
                 head :: (tail |> bubble elementOrder)
 
 
+{-| Runtime `n`
+-}
 bubbleStep : Ordering element -> List element -> List element
 bubbleStep elementOrder =
     \list ->
@@ -40,6 +44,8 @@ bubbleStep elementOrder =
                         rightHead :: leftHead :: listFrom2Sorted
 
 
+{-| Runtime `n^2`
+-}
 insertion : Ordering element -> List element -> List element
 insertion elementOrder =
     List.foldl
@@ -49,6 +55,8 @@ insertion elementOrder =
         []
 
 
+{-| Runtime `n * log(n)`
+-}
 quick : Ordering element -> List element -> List element
 quick elementOrder =
     \list ->
@@ -69,6 +77,13 @@ quick elementOrder =
                     ++ (head :: (after |> quick elementOrder))
 
 
+{-| Runtime `n * log(n)`.
+
+TODO: figure out why this leads to a
+
+> RangeError: Maximum call stack size exceeded
+
+-}
 merge : Ordering element -> List element -> List element
 merge elementOrder =
     \list ->
@@ -80,11 +95,6 @@ merge elementOrder =
                 }
 
 
-{-| Anyone an idea why this leads to a
-
-> RangeError: Maximum call stack size exceeded
-
--}
 mergeHelp :
     { elementOrder : Ordering element
     , length : Int
@@ -122,6 +132,8 @@ mergeHelp { elementOrder, length } =
                 ( leftSorted, rightSorted ) |> each2OrderMerge elementOrder
 
 
+{-| Runtime `n`
+-}
 each2OrderMerge :
     Ordering element
     -> ( List element, List element )
