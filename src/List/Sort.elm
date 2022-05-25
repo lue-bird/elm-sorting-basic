@@ -44,7 +44,7 @@ insertion : Ordering element -> List element -> List element
 insertion elementOrder =
     List.foldl
         (\element insertionList ->
-            (element :: insertionList) |> bubble elementOrder
+            (element :: insertionList) |> bubbleStep elementOrder
         )
         []
 
