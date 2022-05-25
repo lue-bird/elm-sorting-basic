@@ -28,8 +28,10 @@ selectionHelp { elementOrder, firstUnsortedIndex } =
                         array
                             |> minimumFrom
                                 { elementOrder = elementOrder
-                                , firstUnsortedIndex = firstUnsortedIndex
-                                , firstUnsortedElement = firstUnsortedElement
+                                , firstUnsorted =
+                                    { index = firstUnsortedIndex
+                                    , element = firstUnsortedElement
+                                    }
                                 }
                 in
                 array
@@ -43,12 +45,11 @@ selectionHelp { elementOrder, firstUnsortedIndex } =
 
 minimumFrom :
     { elementOrder : Ordering element
-    , firstUnsortedIndex : Int
-    , firstUnsortedElement : element
+    , firstUnsorted : { index : Int, element : element }
     }
     -> Array element
     -> { index : Int, element : element }
-minimumFrom { elementOrder, firstUnsortedIndex, firstUnsortedElement } =
+minimumFrom { elementOrder, firstUnsorted } =
     \array ->
         let
             final =
@@ -57,9 +58,9 @@ minimumFrom { elementOrder, firstUnsortedIndex, firstUnsortedElement } =
                         (\element { index, soFarMinimum } ->
                             { index = index + 1
                             , soFarMinimum =
-                                { index = index
+                                { index = soFarMinimum.index
                                 , element =
-                                    if index < firstUnsortedIndex then
+                                    if index < firstUnsorted.index then
                                         soFarMinimum.element
 
                                     else
@@ -75,6 +76,6 @@ minimumFrom { elementOrder, firstUnsortedIndex, firstUnsortedElement } =
                                 }
                             }
                         )
-                        { index = 0, soFarMinimum = { element = firstUnsortedElement, index = firstUnsortedIndex } }
+                        { index = 0, soFarMinimum = firstUnsorted }
         in
         final.soFarMinimum
